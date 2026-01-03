@@ -1,1 +1,17 @@
+trigger:
+  - main
 
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  stagename: 'Build'
+  newstage: 'Release'
+
+jobs:
+  - job: BuildJob
+    steps:
+      - script: echo $(ghtoken)
+        displayName: 'Display Github Token'
+
+   
