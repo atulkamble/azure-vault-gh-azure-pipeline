@@ -5,13 +5,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  keyvaultname: 'ghtoken'
+  keyvaultname: 'mynewvault97070'
+  secretname: 'ghtoken
   stagename: 'Build'
   newstage: 'Release'
 
-jobs:
-  - job: BuildJob
-    steps:
+Connection name: keyvaultname: $(keyvaultname)
+                secrets: $(secretname)'
+stagename: $(stagename)
       - script: echo $(keyvaultname)
         displayName: 'Display Github Token'
 
