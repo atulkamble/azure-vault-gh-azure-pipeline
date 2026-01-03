@@ -5,15 +5,62 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  keyvaultname: 'mynewvault97070'
-  secretname: 'ghtoken
-  stagename: 'Build'
-  newstage: 'Release'
+  - group: 'vault-variables'
+  - name: 'keyvaultname'
+    value: 'mynewvault97070'
+  - name: 'secretname'
+    value: 'ghtoken'
+  - name: 'stagename'
+    value: 'Build'
+  - name: 'newstage'
+    value: 'Release'
 
-Connection name: keyvaultname: $(keyvaultname)
-                secrets: $(secretname)'
-stagename: $(stagename)
-      - script: echo $(keyvaultname)
-        displayName: 'Display Github Token'
+stages:
+- stage: ${{ variables.stagename }}
+  displayName: 'Build Stage'
+  jobs:
+  - job: BuildJob
+    displayName: 'Build Job'
+    steps:
+    - task: AzureKeyVault@2
+      displayName: 'Retrieve GitHub Token from Key Vault'
+      inputs:
+        azureSubscription: 'your-service-connection-name'
+        KeyVaultName: '$(keyvaultname)'
+        SecretsFilter: '$(secretname)'
+        RunAsPreJob: true
+        
+    - script: |
+        echo "Key Vault Name: $(keyvaultname)"
+        echo "Secret retrieved successfully"
+        # Use $(ghtoken) to access the secret value
+      displayName: 'Display Key Vault Info'
+      
+    - script: |
+        # Example of using the GitHub token
+        git config --global user.name "Pipeline User"
+        git config --global user.email "pipeline@example.com"
+        # Use $(ghtoken) for GitHub operations
+      displayName: 'Configure Git with GitHub Token'
+      condition: succeeded()
 
-   
+- stage: ${{ variables.newstage }}
+  displayName: 'Release Stage'
+  dependsOn: ${{ variables.stagename }}
+  condition: succeeded()
+  jobs:
+  - job: ReleaseJob
+    displayName: 'Release Job'
+    steps:
+    - task: AzureKeyVault@2
+      displayName: 'Retrieve GitHub Token for Release'
+      inputs:
+        azureSubscription: 'your-service-connection-name'
+        KeyVaultName: '$(keyvaultname)'
+        SecretsFilter: '$(secretname)'
+        RunAsPreJob: true
+        
+    - script: |
+        echo "Performing release operations with GitHub token"
+        # Use $(ghtoken) for release-related GitHub operations
+      displayName: 'Release Operations'
