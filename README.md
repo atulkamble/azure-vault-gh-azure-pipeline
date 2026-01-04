@@ -1,13 +1,3 @@
-Below is a **clean, beginner-friendly, end-to-end project** that shows how to:
-
-> ✅ Create a **GitHub Personal Access Token (PAT)**
-> ✅ Store it securely in **Azure Key Vault**
-> ✅ Use it **safely inside an Azure DevOps Pipeline**
-
-This is exactly the kind of **real-world DevOps security flow** interviewers and production teams expect.
-
----
-
 # 🔐 Project: GitHub Token → Azure Key Vault → Azure Pipeline
 
 ---
@@ -233,14 +223,3 @@ azure-keyvault-github-token-pipeline
 * RBAC vs Access Policies
 
 ---
-
-## 🚀 Want Next?
-
-I can provide:
-
-* 🔁 Token rotation automation
-* 🔐 RBAC-based Key Vault setup
-* 🧪 Full demo with private GitHub repo
-* 📘 README + architecture diagram
-
-Just tell me 👍
